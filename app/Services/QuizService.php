@@ -3,6 +3,7 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use App\AppState\Models\QuestionData;
+use App\AppState\Models\PossibleAnswer;
 use Illuminate\Support\Facades\Session;
 
 class QuizService
@@ -34,13 +35,24 @@ class QuizService
             $questionData = new QuestionData();
             $questionData->questionNo = $i+1;
             $questionData->questionText = $questionsFromAPI[$i]["question"];
-            $questionData->possibleAnswers = $questionsFromAPI[$i]["incorrect_answers"];
-            array_push($questionData->possibleAnswers, $questionsFromAPI[$i]["correct_answer"]);
-            shuffle($questionData->possibleAnswers);
+
+            $possibleAnswersFromAPI =  $questionsFromAPI[$i]["incorrect_answers"];
+            array_push($possibleAnswersFromAPI, $questionsFromAPI[$i]["correct_answer"] );
+            shuffle($possibleAnswersFromAPI);
+           
+            $answerLetters = range('A', 'D');
+            for ($j=0; $j<4; $j++) {
+                $questionData->possibleAnswers[$answerLetters[$j]] 
+                                     = $possibleAnswersFromAPI[$j];
+            }
+
             $questionData->correctAnswer = array_search($questionsFromAPI[$i]["correct_answer"], 
                                                         $questionData->possibleAnswers);
+                                                       
             array_push($formattedQuestions, $questionData);
         }
+
+       
     
         return $formattedQuestions;
     }
