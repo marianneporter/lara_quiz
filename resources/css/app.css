@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* gradient for welcome page */
+.bg-blue-gradient {
+    background: linear-gradient(to right, #003366, #000033);
+}
