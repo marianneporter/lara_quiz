@@ -20,4 +20,9 @@ class QuizController extends Controller
         return view('quiz.question', compact('question', 'questionNo'));    
     }
 
+    
+    public function handleQuestionAnswer($questionNo) {
+       
+    }
+
 }

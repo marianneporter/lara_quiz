@@ -19,3 +19,4 @@ Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 Route::get('/quiz/start', [QuizController::class, 'start'])->name('quiz.start');
 Route::get('/quiz/question/{question}', [QuizController::class, 'showQuestion'])->name('quiz.question');
+Route::post('/quiz/question/{question}', [QuizController::class, 'handleQuestionAnswer'])->name('quiz.question');
