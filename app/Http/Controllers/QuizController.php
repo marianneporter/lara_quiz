@@ -21,8 +21,21 @@ class QuizController extends Controller
     }
 
     
-    public function handleQuestionAnswer($questionNo) {
-       
+    public function handleQuestionAnswer(Request $request, $questionNo) {
+
+     
+        $quizService = new QuizService();  
+
+        $userAnswer = $request->input('selected-answer');
+        $action     = $request->input('action');
+
+        if ($userAnswer) {
+            $quizService->updateUserAnswer($questionNo, $userAnswer);
+        }       
+
+        $questionNo = $action == 'next' ? $questionNo + 1 : $questionNo - 1;
+                             
+        return redirect()->route('quiz.question', ['question' => $questionNo]);
     }
 
 }

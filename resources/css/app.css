@@ -6,3 +6,9 @@
 .bg-blue-gradient {
     background: linear-gradient(to right, #003366, #000033);
 }
+
+.question-page input[type="radio"]:checked + label {
+    /* Styles for the label when the associated radio button is checked */
+    background-color: #f59e0b; /* Example: Change to a different color */
+    color: white;   
+}

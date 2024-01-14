@@ -1,11 +1,10 @@
-
-
 @extends('layouts.app')
 
 @section('title', 'Welcome Page')
 
 @section('content')
-    <div class="min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen">
+    <div class="question-page min-w-full bg-blue-gradient text-white
+                flex items-center justify-center min-h-screen">
         <main class="main flex flex-col items-center justify-center">
            
             <h1 class="text-xl">Question {{$questionNo}} </h1>
@@ -18,39 +17,37 @@
 
             <h1 class="text-xl">Select Answer...</h1>
 
-            @foreach ($question->possibleAnswers as $key => $value)
-              
-                <div class="possible-answer bg-white rounded-lg py-3 px-4 shadow-md w-[30rem]
-                            hover:bg-orange-200 text-black mt-3">
-                    <span class="text-xl answer-key" >{{$key}}</span>
-                    {{ $value }}
-                </div>                      
-            @endforeach
+            <form action="{{ route('quiz.question', $questionNo) }}" method="post">
+                @csrf
 
-            <div>
-                <form action="{{ route('quiz.question', $questionNo) }}" method="post">
-                    @csrf                  
-                    <input id="selected-answer" type="hidden" name="selected-answer" value="">                   
-                    <button type="submit" name="action" value="previous" class="p-3">Previous</button>
-                    <button type="submit" name="action" value="next" class="p-3">Next</button>
-                </form>  
-            </div>          
-        </main>
-    </div> 
+                @foreach ($question->possibleAnswers as $key => $value)
+                    <div class="mb-3">
+                        <input type="radio" name="selected-answer"
+                               id="answer_{{ $key }}" value="{{ $key }}" class="hidden" 
+                               {{ $question->userAnswer == $key ? 'checked' : '' }} />
+                        <label for="answer_{{ $key }}"
+                               class="block bg-white cursor-pointer rounded-lg py-3 px-4 
+                                      shadow-md w-[30rem] hover:bg-orange-200 text-black">
+                            <span class="text-xl">{{ $key }}. </span>{{ $value }}
+                        </label>
+                    </div>
+                @endforeach
 
-    <script>
-        console.log('welcome to javascript');
-        const selectedAnswer = document.getElementById('selected-answer');
-        const possibleAnswers = document.querySelectorAll('.possible-answer');
-        console.log(possibleAnswers);
-        possibleAnswers.forEach( possibleAnswer => {
-            possibleAnswer.addEventListener('click', () => {
-                let userAnswer = possibleAnswer.querySelector('.answer-key').textContent;
-                // set hidden form value
-                selectedAnswer.value = userAnswer;
-                console.log(userAnswer);
-            })
-        })
-    </script>
+                <div class="flex justify-between">
+                    @if ($questionNo != 1) 
+                        <button type="submit" name="action" value="previous" class="p-3">
+                            <i class="fa-solid fa-backward"></i> Previous</button>
+                    @endif
+                   
+                    @if ($questionNo < 10)                     
+                       <button type="submit" name="action" value="next" class="p-3 ml-auto">
+                            Next <i class="fa-solid fa-forward"></i></button>
+                    @else
+                        <a href="{{ route('quiz.start') }}"
+                           class="text-white bg-orange-500 hover:bg-orange-600
+                                    font-bold py-2 px-8 rounded mt-3">Finish</a>
+                    @endif
+                </div>
+            </form>
 
 @endsection
