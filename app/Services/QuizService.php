@@ -8,18 +8,12 @@ use Illuminate\Support\Facades\Session;
 
 class QuizService
 {
-    public function __construct()
-    {
-        if (!Session::has('quiz')) {
-            $this->fetchQuestions();
-        }        
-    }
 
     public function fetchQuestions()
-    {      
+    {     
         $response = Http::get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple');
-        $questions = $response->json();      
-        $formattedQuestions = $this->formatDataForSession($questions["results"]);
+        $questions = $response->json();        
+        $formattedQuestions = $this->formatDataForSession($questions["results"]);  
         $quizSession = new QuizSession();
         $quizSession->questions = $formattedQuestions;
         Session::put('quiz', $quizSession);   
@@ -69,7 +63,7 @@ class QuizService
             $answerLetters = range('A', 'D');
             for ($j=0; $j<4; $j++) {
                 $questionData->possibleAnswers[$answerLetters[$j]] 
-                                     = $possibleAnswersFromAPI[$j];
+                                     = html_entity_decode($possibleAnswersFromAPI[$j]);
             }
 
             $questionData->correctAnswer = array_search($questionsFromAPI[$i]["correct_answer"], 
