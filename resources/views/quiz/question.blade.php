@@ -43,7 +43,7 @@
                        <button type="submit" name="action" value="next" class="p-3 ml-auto">
                             Next <i class="fa-solid fa-forward"></i></button>
                     @else
-                        <a href="{{ route('quiz.start') }}"
+                        <a href="{{ route('quiz.finish') }}"
                            class="text-white bg-orange-500 hover:bg-orange-600
                                     font-bold py-2 px-8 rounded mt-3">Finish</a>
                     @endif

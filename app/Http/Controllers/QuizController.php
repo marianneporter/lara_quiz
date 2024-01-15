@@ -19,7 +19,6 @@ class QuizController extends Controller
         $question = $quizService->getQuestion($questionNo);      
         return view('quiz.question', compact('question', 'questionNo'));    
     }
-
     
     public function handleQuestionAnswer(Request $request, $questionNo) {
 
@@ -36,6 +35,15 @@ class QuizController extends Controller
         $questionNo = $action == 'next' ? $questionNo + 1 : $questionNo - 1;
                              
         return redirect()->route('quiz.question', ['question' => $questionNo]);
+    }
+
+    public function finish() {
+
+        $quizService = new QuizService();  
+
+        $score = $quizService->calcScore();
+
+        return view('quiz.finish', ['score' => $score]);   
     }
 
 }

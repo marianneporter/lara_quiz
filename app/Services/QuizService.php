@@ -3,14 +3,14 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Http;
 use App\AppState\Models\QuestionData;
-use App\AppState\Models\PossibleAnswer;
+use App\AppState\Models\QuizSession;
 use Illuminate\Support\Facades\Session;
 
 class QuizService
 {
     public function __construct()
     {
-        if (!Session::has('quiz.questions')) {
+        if (!Session::has('quiz')) {
             $this->fetchQuestions();
         }        
     }
@@ -20,17 +20,37 @@ class QuizService
         $response = Http::get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple');
         $questions = $response->json();      
         $formattedQuestions = $this->formatDataForSession($questions["results"]);
-        Session::put('quiz.questions', $formattedQuestions);   
+        $quizSession = new QuizSession();
+        $quizSession->questions = $formattedQuestions;
+        Session::put('quiz', $quizSession);   
     }
 
     public function getQuestion($questionNo) {
-        $questions = session('quiz.questions', []);     
-        return $questions[$questionNo];
+        $quizSession = session('quiz', []);     
+        return $quizSession->questions[$questionNo];
+    }
+
+    public function calcScore() {
+        $score = 0;
+        $quizSession = session('quiz', []); 
+        
+        foreach ($quizSession->questions as $questionData) {
+            if ($questionData->isCorrect()) {
+                $score++;
+            }
+        }  
+        
+        $quizSession->score = $score;
+
+        session(['quiz' => $quizSession]);
+        
+        return $score;
     }
 
     public function updateUserAnswer($questionNo, $userAnswer) {
-        $questions = session('quiz.questions', []);
-        $questions[$questionNo]->userAnswer = $userAnswer;
+        $quizSession = session('quiz', []);
+        $quizSession->questions[$questionNo]->userAnswer = $userAnswer;
+        session(['quiz' => $quizSession]);
     }
 
     private function formatDataForSession($questionsFromAPI) {
@@ -55,8 +75,8 @@ class QuizService
             $questionData->correctAnswer = array_search($questionsFromAPI[$i]["correct_answer"], 
                                                         $questionData->possibleAnswers);
                                                        
-          //  array_push($formattedQuestions, $questionData);
-            // add question to formatted questions array using indices 1-10
+         
+            // add question to formatted questions array 
             $formattedQuestions[$i+1] = $questionData;
         }
 
