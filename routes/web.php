@@ -21,3 +21,5 @@ Route::get('/quiz/start', [QuizController::class, 'start'])->name('quiz.start');
 Route::get('/quiz/question/{question}', [QuizController::class, 'showQuestion'])->name('quiz.question');
 Route::post('/quiz/question/{question}', [QuizController::class, 'handleQuestionAnswer'])->name('quiz.question');
 Route::get('/quiz/finish', [QuizController::class, 'finish'])->name('quiz.finish');
+
+Route::get('/quiz/results', [QuizController::class, 'results'])->name('quiz.results');

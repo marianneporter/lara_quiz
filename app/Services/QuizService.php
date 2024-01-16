@@ -47,6 +47,15 @@ class QuizService
         session(['quiz' => $quizSession]);
     }
 
+    public function getQuizSession() {
+        return session('quiz', []);
+    }
+
+    /**
+     *   Formatting of API data ready for storing in session.
+     *   The formatting of each array element if the Quiz
+     *   The entire quiz is based on this
+     */
     private function formatDataForSession($questionsFromAPI) {
         $formattedQuestions = [];
         //iterate through api questions and format into the QuestionData class format
@@ -56,26 +65,36 @@ class QuizService
             $questionData->questionNo = $i + 1;
             $questionData->questionText = html_entity_decode($questionsFromAPI[$i]["question"]);
 
+            // store correct and incorrect answers from API in temporary 
+            // $possibleAnswersFromAPI array           
             $possibleAnswersFromAPI =  $questionsFromAPI[$i]["incorrect_answers"];
             array_push($possibleAnswersFromAPI, $questionsFromAPI[$i]["correct_answer"] );
             shuffle($possibleAnswersFromAPI);
            
+                                          
+            // Each possible answer assigned letters A-D for quiz
             $answerLetters = range('A', 'D');
-            for ($j=0; $j<4; $j++) {
-                $questionData->possibleAnswers[$answerLetters[$j]] 
-                                     = html_entity_decode($possibleAnswersFromAPI[$j]);
-            }
 
-            $questionData->correctAnswer = array_search($questionsFromAPI[$i]["correct_answer"], 
-                                                        $questionData->possibleAnswers);
-                                                       
+            // loop through all possible answers. Store in associative array under keys A-D ready 
+            // for display in quiz. 
+            for ($j=0; $j<4; $j++) {
+                
+                // check where the correct answer is in possible answers array after shuffle.
+                // Store the letter for the correct answer in the QuestionData->correctAnswer
+                // as this is what will be compared later with the answer the user chooses.
+                if ( $possibleAnswersFromAPI[$j] ==  $questionsFromAPI[$i]["correct_answer"] ) {
+                    $questionData->correctAnswer = $answerLetters[$j];
+                }
+
+                // Store all possible answers in QuestionData object with their letters ready for display in quiz
+                $questionData->possibleAnswers[$answerLetters[$j]] 
+                                        = html_entity_decode($possibleAnswersFromAPI[$j]);
+            }                                                       
          
             // add question to formatted questions array 
             $formattedQuestions[$i+1] = $questionData;
-        }
-
+        }       
        
-    
         return $formattedQuestions;
     }
 }

@@ -44,4 +44,9 @@ class QuizController extends Controller
         return view('quiz.finish', ['score' => $score]);   
     }
 
+    public function results() {
+        $quizSession = $this->quizService->getQuizSession();
+        return view('quiz.results', ['quiz' => $quizSession]);   
+    }
+
 }
