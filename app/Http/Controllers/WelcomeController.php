@@ -2,12 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\QuizParamsService;
 
 class WelcomeController extends Controller
 {
+    protected $quizParamsService;
+
+    public function __construct(QuizParamsService $quizParamsService) {
+        $this->quizParamsService = $quizParamsService;
+
+       
+    }
+
     public function index() {    
 
-        return view('welcome');
+       
+        $quizParams = $this->quizParamsService->initialiseSessionParams();       
+        return view('welcome', ['params' => $quizParams]);
     }
 }
