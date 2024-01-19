@@ -19,9 +19,6 @@ class QuizController extends Controller
         return redirect()->route('quiz.question', ['question' => 1]);
     }
 
-    public function changeParams(Request $request) {
-        
-    }
 
     public function showQuestion($questionNo) {  
       

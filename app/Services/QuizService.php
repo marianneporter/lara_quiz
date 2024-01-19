@@ -8,10 +8,19 @@ use Illuminate\Support\Facades\Session;
 
 class QuizService
 {
+    protected $quizParamsService;
+
+    public function __construct(QuizParamsService $quizParamsService) {
+        $this->quizParamsService = $quizParamsService;
+    }
 
     public function fetchQuestions()
-    {     
-        $response = Http::get('https://opentdb.com/api.php?amount=10&difficulty=easy&type=multiple');
+    {    
+        $quizParams = $this->quizParamsService->getQuizParams();
+        
+        $quizUrl ="https://opentdb.com/api.php?amount=10&category=$quizParams->categoryNo&difficulty=easy&type=multiple";
+        $response = Http::get($quizUrl);
+   //     $response = Http::get('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple');
         $questions = $response->json();        
         $formattedQuestions = $this->formatDataForSession($questions["results"]);  
         $quizSession = new QuizSession();

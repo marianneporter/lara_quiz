@@ -7,20 +7,28 @@ class QuizParamsService
 {
     public function initialiseSessionParams() {
         $quizParams = new QuizParams();
-        $quizParams->category = config('custom.quiz.default_category');
+        $quizParams->categoryNo = config('custom.quiz.default_category');
         $quizParams->difficulty = config('custom.quiz.default_difficulty');
 
-        session(['quiz' => $quizParams]);
+        session(['quizParams' => $quizParams]);
 
         return $quizParams;
     }
 
-    public function storeDefaultParams() {
-
+    public function quizParamsSet() {
+        return session()->has('quizParams');
     }
 
-    public function storeSelectedCategory() {
+    public function getQuizParams() {
+        return session('quizParams');
+    }
 
+    public function storeSelectedCategory($newCategoryNo) {
+      
+        $quizParams = session('quizParams');
+        $quizParams->categoryNo = $newCategoryNo;
+        session(['quizParams' => $quizParams]);  
+        return $quizParams;      
     }
 
     public function storeSelectedDifficulty() {

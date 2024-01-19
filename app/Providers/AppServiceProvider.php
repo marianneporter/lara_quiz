@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\QuizService;
+use App\Services\QuizParamsService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -12,11 +13,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(QuizService::class, function ($app) {
-            return new QuizService();
+        $this->app->singleton(QuizParamsService::class, function ($app) {
+            return new QuizParamsService();
         });
-    }
     
+        $this->app->singleton(QuizService::class, function ($app) {
+            return new QuizService($app->make(QuizParamsService::class));
+        });
+    }    
 
     /**
      * Bootstrap any application services.
