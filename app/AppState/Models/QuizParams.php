@@ -3,6 +3,6 @@
 namespace App\AppState\Models;
 
 class QuizParams { 
-    public string $category;
+    public int $category;
     public string $difficulty; 
 }

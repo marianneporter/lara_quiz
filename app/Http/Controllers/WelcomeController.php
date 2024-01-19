@@ -9,14 +9,10 @@ class WelcomeController extends Controller
     protected $quizParamsService;
 
     public function __construct(QuizParamsService $quizParamsService) {
-        $this->quizParamsService = $quizParamsService;
-
-       
+        $this->quizParamsService = $quizParamsService;       
     }
 
-    public function index() {    
-
-       
+    public function index() {         
         $quizParams = $this->quizParamsService->initialiseSessionParams();       
         return view('welcome', ['params' => $quizParams]);
     }
