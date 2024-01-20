@@ -17,11 +17,15 @@ class QuizService
     public function fetchQuestions()
     {    
         $quizParams = $this->quizParamsService->getQuizParams();
+        $difficulty = strtolower($quizParams->difficulty);
+
+        $queryString = "amount=10&category=$quizParams->categoryNo&difficulty=$difficulty&type=multiple";
         
-        $quizUrl ="https://opentdb.com/api.php?amount=10&category=$quizParams->categoryNo&difficulty=easy&type=multiple";
-        $response = Http::get($quizUrl);
-   //     $response = Http::get('https://opentdb.com/api.php?amount=10&category=9&difficulty=easy&type=multiple');
-        $questions = $response->json();        
+        $quizUrl ="https://opentdb.com/api.php?{$queryString}"; 
+     
+        $response = Http::get($quizUrl); 
+        $questions = $response->json(); 
+          
         $formattedQuestions = $this->formatDataForSession($questions["results"]);  
         $quizSession = new QuizSession();
         $quizSession->questions = $formattedQuestions;

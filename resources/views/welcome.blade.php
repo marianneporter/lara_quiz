@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome Page')
+@section('title', 'Welcome to Lara Quiz')
 
 @section('content')
     <div class="welcome-page min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen">
@@ -18,6 +18,23 @@
                                         {{ $params->categoryNo == $categoryNo ? 
                                              'bg-orange-700' : ' bg-transparent' }}"
                                 value="{{ $categoryNo  }}">{{ $categoryName }}                              
+                            </button>                                  
+                        @endforeach                       
+                    </div>  
+                </div>   
+            </form>
+
+                                                          
+            <form method="post" action="{{ route('welcome.difficulty') }}">
+                @csrf
+                <div class = " text-white w-full p-4 rounded-sm">
+                    <div class="flex justify-center gap-2 flex-wrap">
+                        @foreach ( $availableDifficulties as $difficulty)                            
+                            <button type="submit" name="difficulty" 
+                                class="rounded-sm  border-2 border-orange-700 px-2
+                                        {{ $params->difficulty == $difficulty ? 
+                                             'bg-orange-700' : ' bg-transparent' }}"
+                                value="{{ $difficulty  }}">{{ $difficulty }}                              
                             </button>                                  
                         @endforeach                       
                     </div>  

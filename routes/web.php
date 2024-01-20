@@ -16,11 +16,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
-Route::post('/category', [WelcomeController::class, 'changecategory'])->name('welcome.category');
+Route::post('/category', [WelcomeController::class, 'changeCategory'])->name('welcome.category');
+Route::post('/difficulty', [WelcomeController::class, 'changeDifficulty'])->name('welcome.difficulty');
 
 Route::get('/quiz/start', [QuizController::class, 'start'])->name('quiz.start');
-
-
 Route::get('/quiz/question/{question}', [QuizController::class, 'showQuestion'])->name('quiz.question');
 Route::post('/quiz/question/{question}', [QuizController::class, 'handleQuestionAnswer'])->name('quiz.question');
 Route::get('/quiz/finish', [QuizController::class, 'finish'])->name('quiz.finish');

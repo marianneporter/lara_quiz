@@ -31,8 +31,11 @@ class QuizParamsService
         return $quizParams;      
     }
 
-    public function storeSelectedDifficulty() {
-
+    public function storeSelectedDifficulty($difficulty) {
+        $quizParams = session('quizParams');
+        $quizParams->difficulty = $difficulty;
+        session(['quizParams' => $quizParams]);  
+        return $quizParams;      
     }
 
     

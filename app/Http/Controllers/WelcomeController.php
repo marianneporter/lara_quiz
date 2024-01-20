@@ -21,10 +21,13 @@ class WelcomeController extends Controller
             $quizParams = $this->quizParamsService->initialiseSessionParams(); 
         }           
          
-        $availableCategories =  config('custom.quiz.categories');   
+        $availableCategories   =  config('custom.quiz.categories');   
+        $availableDifficulties =  config('custom.quiz.difficulties');   
+      
         return view('welcome', [
             'params' => $quizParams,
-            'availableCategories' => $availableCategories
+            'availableCategories' => $availableCategories,
+            'availableDifficulties' => $availableDifficulties
         ]);
     }
 
@@ -37,5 +40,13 @@ class WelcomeController extends Controller
         return redirect()->route('welcome');
     }
 
+    public function changeDifficulty(Request $request) {
+
+        $newDifficulty = $request['difficulty'];
+
+        $this->quizParamsService->storeSelectedDifficulty($newDifficulty);
+       
+        return redirect()->route('welcome');
+    }
     
 }

@@ -5,13 +5,13 @@ return [
     'default_difficulty' => 'Easy',  
     'categories' => [
         9 => 'General Knowledge',
-        11 => 'Film',
-        13 => 'Musicals and Theatre',
+        11 => 'Film',    
         17 => 'Science and Nature',
         18 => 'Computers',
         21 => 'Sports',
         22 => 'Geography',
-        23 => 'History'      
+        23 => 'History',
+        28 => 'Vehicles'      
     ],
     'difficulties' => [
         'Easy',
