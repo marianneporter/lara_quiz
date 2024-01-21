@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Services\QuizService;
+use App\Services\QuizParamsService;
 
 class QuizController extends Controller
 {
     protected $quizService;
+    protected $quizParamsService;
 
-    public function __construct(QuizService $quizService) {
-        $this->quizService = $quizService;        
+    public function __construct(QuizService $quizService,
+                                QuizParamsService $quizParamsService) {
+        $this->quizService = $quizService;   
+        $this->quizParamsService = $quizParamsService;    
     }
 
     public function start() {         
         session()->forget('quiz');
-        $this->quizService->fetchQuestions();
+        $this->quizService->fetchQuestions();     
         return redirect()->route('quiz.question', ['question' => 1]);
     }
 
@@ -47,7 +51,37 @@ class QuizController extends Controller
 
     public function results() {
         $quizSession = $this->quizService->getQuizSession();
-        return view('quiz.results', ['quiz' => $quizSession]);   
+        $quizParams =$this->quizParamsService->getQuizParams();
+        $filter = $quizParams->filterResults;
+      
+        $questionsToReturn = null;
+        if ($filter == "All") {
+            $questionsToReturn = $quizSession->questions;
+        } else if ($filter == "Correct") {
+            $questionsToReturn = array_filter($quizSession->questions, function($question) use ($filter) {
+                return $question->isCorrect(); 
+            });
+        } else {
+            $questionsToReturn = array_filter($quizSession->questions, function($question) use ($filter) {
+                return !$question->isCorrect(); 
+            });
+        }
+
+
+
+        return view('quiz.results', ['score'  => $quizSession->score,
+                                     'questions'   => $questionsToReturn,
+                                     'filter' => $quizParams->filterResults]);   
+    }
+
+    public function filterResults(Request $request) {
+     
+        $filter = $request['filter'];       
+
+        $this->quizParamsService->storeSelectedFilter($filter);
+
+        return redirect()->route('quiz.results');
+       
     }
 
 }

@@ -1,3 +1,13 @@
+@php
+    $allFilterClass = $filter == 'All' ? "bg-orange-700" : "bg-transparent";
+    $incorrectFilterClass = $filter == 'Incorrect' ? "bg-orange-700" : "bg-transparent";
+    $correctFilterClass = $filter == 'Correct' ? "bg-orange-700" : "bg-transparent";
+
+    $allElDisabled = $filter == 'All' ? "disabled" : "";
+    $incorrectElDisabled = $filter == 'Incorrect' ? "disabled" : "";
+    $correctElDisabled = $filter == 'Correct' ? "disabled" : "";
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Results')
@@ -6,7 +16,7 @@
     <div class="min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen">
         <main class="main flex flex-col items-center justify-center">
             <div class="flex justify-between w-[30rem]">
-                <h1 class="text-3xl mt-4 mb-3 ">You scored {{ $quiz->score }} out of 10!</h1>
+                <h1 class="text-3xl mt-4 mb-3 ">You scored {{ $score }} out of 10!</h1>
                 <div class="pt-2 mt-4">
                     <a href="{{ route('welcome') }}" class="text-white bg-orange-500 hover:bg-orange-600
                                                             font-bold py-2 px-6 rounded mt-3">
@@ -15,28 +25,50 @@
                 </div> 
             </div>
         
-            <h2 class="text-2xl mt-2">Your Results</h2>
+            <div class="flex justify-between items-center gap-4 mt-2">
+                <h2 class="text-2xl ">Your Results</h2>                   
+                <form action="{{ route('quiz.results.filter') }}" method="post" >
+                    @csrf
+                    <button type="submit" name="filter" 
+                        class="rounded-sm border-2 border-orange-700 px-2
+                              bg-orange-700  {{ $allFilterClass }} "                
+                              value="All" {{ $allElDisabled }}>See All                             
+                    </button> 
+                    <button type="submit" name="filter" 
+                        class="rounded-sm  border-2 border-orange-700 px-2
+                               bg-orange-700 {{ $incorrectFilterClass }}"                      
+                               value="Incorrect" {{ $incorrectElDisabled }}  >Incorrect Only                             
+                    </button>    
+                    <button type="submit" name="filter" 
+                        class="rounded-sm  border-2 border-orange-700 px-2
+                              bg-orange-700 {{ $correctFilterClass }}"                       
+                                value="Correct" {{ $correctElDisabled }} >Correct Only                             
+                    </button>                         
+                </form>
+                               
+            </div>
+           
 
-            @foreach ($quiz->questions as $questions) 
+            @foreach ($questions as $question) 
                 <div class="bg-white rounded-lg py-3 px-4 shadow-md w-[30rem]
                             hover:bg-orange-200 text-black mt-4 mb-4">
-                    <p>Question {{ $questions->questionNo }}</p>
-                    <p class="mt-2">{{ $questions->questionText }}</p>
+                    <p>Question {{ $question->questionNo }}</p>
+                    <p class="mt-2">{{ $question->questionText }}</p>
                     <hr class="border border-blue-900 mt-4 mb-2"/>
                     <div class="flex items-center justify-between">                        
                         <div>
                             <p>Your Answer:
-                                {{ $questions->userAnswer ?
-                                   $questions->possibleAnswers[$questions->userAnswer] : "" }}
+                                {{ $question->userAnswer ?
+                                   $question->possibleAnswers[$question->userAnswer] : "" }}
                             </p>
-                            @if (!($questions->userAnswer == $questions->correctAnswer))      
+                            @if (!($question->userAnswer == $question->correctAnswer))      
                                 <p class="mt-2">Correct Answer:
-                                    {{ $questions->possibleAnswers[$questions->correctAnswer] }}
+                                    {{ $question->possibleAnswers[$question->correctAnswer] }}
                                 </p>
                             @endif
                         </div>
                         <div>
-                            @if ($questions->correctAnswer == $questions->userAnswer)
+                            @if ($question->correctAnswer == $question->userAnswer)
                                <i class="fa-solid fa-check fa-2x text-green-700"></i>
                             @else
                                <i class="fa-solid fa-xmark fa-2x text-red-700"></i>

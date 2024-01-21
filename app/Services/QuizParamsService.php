@@ -9,6 +9,7 @@ class QuizParamsService
         $quizParams = new QuizParams();
         $quizParams->categoryNo = config('custom.quiz.default_category');
         $quizParams->difficulty = config('custom.quiz.default_difficulty');
+        $quizParams->filterResults = "All";
 
         session(['quizParams' => $quizParams]);
 
@@ -36,6 +37,13 @@ class QuizParamsService
         $quizParams->difficulty = $difficulty;
         session(['quizParams' => $quizParams]);  
         return $quizParams;      
+    }
+
+    public function storeSelectedFilter($newFilter) {
+        $quizParams = session('quizParams');
+        $quizParams->filterResults = $newFilter;
+        session(['quizParams' => $quizParams]);  
+        return $quizParams;     
     }
 
     
