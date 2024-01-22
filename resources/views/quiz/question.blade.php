@@ -5,11 +5,11 @@
 @section('content')
     <div class="question-page min-w-full bg-blue-gradient text-white
                 flex items-center justify-center min-h-screen">
-        <main class="main flex flex-col items-center justify-center">
+        <main class="main flex flex-col items-center justify-center w-full sm:w-[30rem] p-2">
            
             <h1 class="text-xl">Question {{$questionNo}} </h1>
           
-            <div class="bg-white rounded-lg py-3 px-4 shadow-md w-[30rem]
+            <div class="bg-white rounded-lg py-3 px-4 shadow-md w-full
                         hover:bg-orange-200 text-black mt-4 mb-4">
                 <span class="text-xl" >Q </span>
                 {{ $question->questionText }}
@@ -17,7 +17,7 @@
 
             <h1 class="text-xl">Select Answer...</h1>
 
-            <form action="{{ route('quiz.question', $questionNo) }}" method="post">
+            <form action="{{ route('quiz.question', $questionNo) }}" method="post" class="w-full">
                 @csrf
 
                 @foreach ($question->possibleAnswers as $key => $value)
@@ -26,8 +26,9 @@
                                id="answer_{{ $key }}" value="{{ $key }}" class="hidden" 
                                {{ $question->userAnswer == $key ? 'checked' : '' }} />
                         <label for="answer_{{ $key }}"
-                               class="block bg-white cursor-pointer rounded-lg py-3 px-4 
-                                      shadow-md w-[30rem] hover:bg-orange-200 text-black">
+                               class="block bg-white cursor-pointer rounded-lg  py-3 px-4 
+                                      w-full
+                                      shadow-md  hover:bg-orange-200 text-black">
                             <span class="text-xl">{{ $key }}. </span>{{ $value }}
                         </label>
                     </div>
@@ -49,5 +50,5 @@
                     @endif
                 </div>
             </form>
-
+        </main>
 @endsection

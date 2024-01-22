@@ -13,47 +13,49 @@
 @section('title', 'Results')
 
 @section('content')
-    <div class="min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen">
+    <div class="min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen p-2">
         <main class="main flex flex-col items-center justify-center">
-            <div class="flex justify-between w-[30rem]">
-                <h1 class="text-3xl mt-4 mb-3 ">You scored {{ $score }} out of 10!</h1>
-                <div class="pt-2 mt-4">
+            <div class="flex flex-col sm:flex-row justify-between w-full sm:w-[30rem]">
+                <h1 class="text-3xl mt-4 sm:mt-16 mb-3 order-2 sm:order-1">You scored {{ $score }} out of 10!</h1>
+                <div class="pt-2 mt-8 sm:mt-16  order-1 sm:order2 ml-auto">
                     <a href="{{ route('welcome') }}" class="text-white bg-orange-500 hover:bg-orange-600
-                                                            font-bold py-2 px-6 rounded mt-3">
+                                                            font-bold py-2 px-6 rounded mt-3 ">
                         Play Again
                     </a>  
                 </div> 
             </div>
         
-            <div class="flex justify-between items-center gap-4 mt-2">
-                <h2 class="text-2xl ">Your Results</h2>                   
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mt-2 sm:mt-4">
+                <h2 class="text-2xl">Your Results</h2>                   
                 <form action="{{ route('quiz.results.filter') }}" method="post" >
                     @csrf
-                    <button type="submit" name="filter" 
-                        class="rounded-sm border-2 border-orange-700 px-2
+                    <div class="flex gap-2">
+                        <button type="submit" name="filter" 
+                            class="rounded-sm border-2 border-orange-700 px-2
                               bg-orange-700  {{ $allFilterClass }} "                
                               value="All" {{ $allElDisabled }}>See All                             
-                    </button> 
-                    <button type="submit" name="filter" 
-                        class="rounded-sm  border-2 border-orange-700 px-2
-                               bg-orange-700 {{ $incorrectFilterClass }}"                      
-                               value="Incorrect" {{ $incorrectElDisabled }}  >Incorrect Only                             
-                    </button>    
-                    <button type="submit" name="filter" 
-                        class="rounded-sm  border-2 border-orange-700 px-2
-                              bg-orange-700 {{ $correctFilterClass }}"                       
-                                value="Correct" {{ $correctElDisabled }} >Correct Only                             
-                    </button>                         
+                        </button> 
+                        <button type="submit" name="filter" 
+                            class="rounded-sm  border-2 border-orange-700 px-2
+                                bg-orange-700 {{ $incorrectFilterClass }}"                      
+                                value="Incorrect" {{ $incorrectElDisabled }}  >Incorrect Only                             
+                        </button>    
+                        <button type="submit" name="filter" 
+                            class="rounded-sm  border-2 border-orange-700 px-2
+                                bg-orange-700 {{ $correctFilterClass }}"                       
+                                    value="Correct" {{ $correctElDisabled }} >Correct Only                             
+                        </button>           
+                    </div>              
                 </form>
                                
             </div>
            
 
             @foreach ($questions as $question) 
-                <div class="bg-white rounded-lg py-3 px-4 shadow-md w-[30rem]
+                <div class="bg-white rounded-lg py-3 px-4 shadow-md w-full sm:w-[30rem]
                             hover:bg-orange-200 text-black mt-4 mb-4">
                     <p>Question {{ $question->questionNo }}</p>
-                    <p class="mt-2">{{ $question->questionText }}</p>
+                    <p class="mt-2 break-words">{{ $question->questionText }}</p>
                     <hr class="border border-blue-900 mt-4 mb-2"/>
                     <div class="flex items-center justify-between">                        
                         <div>
