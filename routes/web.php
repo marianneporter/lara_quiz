@@ -26,3 +26,5 @@ Route::get('/quiz/finish', [QuizController::class, 'finish'])->name('quiz.finish
 
 Route::get('/quiz/results', [QuizController::class, 'results'])->name('quiz.results');
 Route::post('/quiz/results/filter', [QuizController::class, 'filterResults'])->name('quiz.results.filter');
+
+Route::get('/error', [QuizController::class, 'error'])->name('error');

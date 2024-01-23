@@ -21,16 +21,21 @@ class QuizService
         $difficulty = strtolower($quizParams->difficulty);
 
         $queryString = "amount=$questionCount&category=$quizParams->categoryNo&difficulty=$difficulty&type=multiple";
-        
+               
         $quizUrl ="https://opentdb.com/api.php?{$queryString}"; 
      
         $response = Http::get($quizUrl); 
-        $questions = $response->json(); 
+        $questions = $response->json();         
+  
+        if (!$questions || $questions['response_code'] != 0) {
+            return false;
+        }
           
         $formattedQuestions = $this->formatDataForSession($questions["results"]);  
         $quizSession = new QuizSession();
         $quizSession->questions = $formattedQuestions;
-        Session::put('quiz', $quizSession);   
+        Session::put('quiz', $quizSession);  
+        return true; 
     }
 
     public function getQuestion($questionNo) {

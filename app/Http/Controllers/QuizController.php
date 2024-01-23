@@ -19,8 +19,14 @@ class QuizController extends Controller
 
     public function start() {         
         session()->forget('quiz');
-        $this->quizService->fetchQuestions();     
-        return redirect()->route('quiz.question', ['question' => 1]);
+
+        if ($this->quizService->fetchQuestions()) {
+            // questions fetched successfully
+            return redirect()->route('quiz.question', ['question' => 1]);
+        }    
+        
+        //error condition - api call unsuccessful
+        return redirect()->route('error');
     }
 
 
@@ -102,5 +108,7 @@ class QuizController extends Controller
        
     }
 
-
+    public function error() {
+        return view('error');
+    }
 }
