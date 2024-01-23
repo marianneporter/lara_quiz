@@ -26,33 +26,50 @@ class QuizController extends Controller
 
     public function showQuestion($questionNo) {  
       
-        $question = $this->quizService->getQuestion($questionNo);      
-        return view('quiz.question', compact('question', 'questionNo'));    
+        $question = $this->quizService->getQuestion($questionNo); 
+        $params = $this->quizParamsService->getQuizParams();
+        $questionCount = $params->noOfQuestions;    
+        return view('quiz.question', 
+                     compact('question', 'questionNo', 'questionCount'));    
     }
     
     public function handleQuestionAnswer(Request $request, $questionNo) {
 
         $userAnswer = $request->input('selected-answer');
-        $action     = $request->input('action');
-
+      
         if ($userAnswer) {
             $this->quizService->updateUserAnswer($questionNo, $userAnswer);
-        }       
+        }   
 
+        $this->quizService->updateUserAnswer( $questionNo, $userAnswer);
+       
+        $action     = $request->input('action');
+
+        // go to finish after storing answer and finish button clicked
+        if ($action == "finish") {
+            return redirect()->route('quiz.finish');
+        }
+        
+        // go to next or previous question after storing current answer
         $questionNo = $action == 'next' ? $questionNo + 1 : $questionNo - 1;
                              
         return redirect()->route('quiz.question', ['question' => $questionNo]);
     }
 
-    public function finish() {  
+    public function finish() {          
+
+        $params = $this->quizParamsService->getQuizParams();
+        $questionCount = $params->noOfQuestions; 
         $score = $this->quizService->calcScore();
-        return view('quiz.finish', ['score' => $score]);   
+        return view('quiz.finish', ['score' => $score,
+                                    'questionCount' => $questionCount]);   
     }
 
     public function results() {
         $quizSession = $this->quizService->getQuizSession();
         $quizParams =$this->quizParamsService->getQuizParams();
         $filter = $quizParams->filterResults;
+        $questionCount = $quizParams->noOfQuestions;
       
         $questionsToReturn = null;
         if ($filter == "All") {
@@ -71,7 +88,8 @@ class QuizController extends Controller
 
         return view('quiz.results', ['score'  => $quizSession->score,
                                      'questions'   => $questionsToReturn,
-                                     'filter' => $quizParams->filterResults]);   
+                                     'filter' => $quizParams->filterResults,
+                                     'questionCount' => $questionCount]);   
     }
 
     public function filterResults(Request $request) {
@@ -83,5 +101,6 @@ class QuizController extends Controller
         return redirect()->route('quiz.results');
        
     }
+
 
 }

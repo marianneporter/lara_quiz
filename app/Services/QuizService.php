@@ -17,9 +17,10 @@ class QuizService
     public function fetchQuestions()
     {    
         $quizParams = $this->quizParamsService->getQuizParams();
+        $questionCount = $quizParams->noOfQuestions;
         $difficulty = strtolower($quizParams->difficulty);
 
-        $queryString = "amount=10&category=$quizParams->categoryNo&difficulty=$difficulty&type=multiple";
+        $queryString = "amount=$questionCount&category=$quizParams->categoryNo&difficulty=$difficulty&type=multiple";
         
         $quizUrl ="https://opentdb.com/api.php?{$queryString}"; 
      
@@ -71,9 +72,11 @@ class QuizService
      */
     private function formatDataForSession($questionsFromAPI) {
         $formattedQuestions = [];
+        $quizParams=$this->quizParamsService->getQuizParams();
+        $questionCount = $quizParams->noOfQuestions;
         //iterate through api questions and format into the QuestionData class format
         //use 0-9 index for the api question#.  add 1 to get the quiz question# for session
-        for ($i=0; $i<=9; $i++)  {
+        for ($i=0; $i <= $questionCount - 1; $i++)  {
             $questionData = new QuestionData();
             $questionData->questionNo = $i + 1;
             $questionData->questionText = html_entity_decode($questionsFromAPI[$i]["question"]);

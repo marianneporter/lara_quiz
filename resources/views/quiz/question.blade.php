@@ -40,13 +40,13 @@
                             <i class="fa-solid fa-backward"></i> Previous</button>
                     @endif
                    
-                    @if ($questionNo < 10)                     
+                    @if ($questionNo < $questionCount)                     
                        <button type="submit" name="action" value="next" class="p-3 ml-auto">
                             Next <i class="fa-solid fa-forward"></i></button>
                     @else
-                        <a href="{{ route('quiz.finish') }}"
+                        <button type="submit" name="action" value="finish"
                            class="text-white bg-orange-500 hover:bg-orange-600
-                                    font-bold py-2 px-8 rounded mt-3">Finish</a>
+                                    font-bold py-2 px-8 rounded mt-3">Finish</button>
                     @endif
                 </div>
             </form>

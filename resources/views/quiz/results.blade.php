@@ -16,7 +16,7 @@
     <div class="min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen p-2">
         <main class="main flex flex-col items-center justify-center">
             <div class="flex flex-col sm:flex-row justify-between w-full sm:w-[30rem]">
-                <h1 class="text-3xl mt-4 sm:mt-16 mb-3 order-2 sm:order-1">You scored {{ $score }} out of 10!</h1>
+                <h1 class="text-3xl mt-4 sm:mt-16 mb-3 order-2 sm:order-1">You scored {{ $score }} out of {{ $questionCount }}!</h1>
                 <div class="pt-2 mt-8 sm:mt-16  order-1 sm:order2 ml-auto">
                     <a href="{{ route('welcome') }}" class="text-white bg-orange-500 hover:bg-orange-600
                                                             font-bold py-2 px-6 rounded mt-3 ">

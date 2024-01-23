@@ -9,6 +9,7 @@ class QuizParamsService
         $quizParams = new QuizParams();
         $quizParams->categoryNo = config('custom.quiz.default_category');
         $quizParams->difficulty = config('custom.quiz.default_difficulty');
+        $quizParams->noOfQuestions = config('custom.quiz.number_of_questions');
         $quizParams->filterResults = "All";
 
         session(['quizParams' => $quizParams]);
