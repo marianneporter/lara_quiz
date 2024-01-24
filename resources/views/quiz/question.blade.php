@@ -5,7 +5,7 @@
 @section('content')
     <div class="question-page min-w-full bg-blue-gradient text-white
                 flex items-center justify-center min-h-screen">
-        <main class="main flex flex-col items-center justify-center w-full sm:w-[30rem] p-2">
+        <main class="main flex flex-col items-center sm:justify-center w-full sm:w-[30rem] p-2">
            
             <h1 class="text-xl">Question {{$questionNo}} </h1>
           
