@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Welcome Page')
+@section('title', 'Lara Question')
 
 @section('content')
     <div class="question-page min-w-full bg-blue-gradient text-white
