@@ -8,4 +8,11 @@ export default defineConfig({
             refresh: true,
         }),
     ],
+    css: {
+        postcss: {
+            plugins: [
+                require('tailwindcss')                
+            ],
+        },
+    },
 });
