@@ -1,10 +1,13 @@
 <?php
 namespace App\Services;
 
+use App\AppState\Models\QuizSession;
 use Illuminate\Support\Facades\Http;
 use App\AppState\Models\QuestionData;
-use App\AppState\Models\QuizSession;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Support\Facades\Log;
+
 
 class QuizService
 {
@@ -21,13 +24,21 @@ class QuizService
         $difficulty = strtolower($quizParams->difficulty);
 
         $queryString = "amount=$questionCount&category=$quizParams->categoryNo&difficulty=$difficulty&type=multiple";
-               
-        $quizUrl ="https://opentdb.com/api.php?{$queryString}"; 
-     
-        $response = Http::get($quizUrl); 
-        $questions = $response->json();         
+ 
+        $quizUrl = "https://opentdb.com/api.php?{$queryString}";
+
+        try {
+            $response = Http::timeout(5)->get($quizUrl); // Set timeout to 5 seconds
+            $questions = $response->json();
+        } catch (ConnectionException $e) {
+            Log::error('****** API connection failed *******', [
+                'url' => $quizUrl,
+                'exception' => $e->getMessage()
+            ]);
+            return false;
+        }
   
-        if (!$questions || $questions['response_code'] != 0) {
+        if (!$questions || $questions['response_code'] != 0) {            
             return false;
         }
           

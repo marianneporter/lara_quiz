@@ -3,8 +3,11 @@
 @section('title', 'Welcome to Lara Quiz')
 
 @section('content')
-    <div class="welcome-page min-w-full bg-blue-gradient text-white flex items-center justify-center min-h-screen p-2">
-        <main class="main flex flex-col items-center sm:justify-center max-w-[30rem]">
+    <div class="welcome-page min-w-full bg-blue-gradient text-white 
+                 min-h-screen p-2
+                 lg:flex lg:items-center lg:justify-center">
+        <main class="main flex flex-col items-center max-w-[30rem]
+                     mt-28 sm:mt-32 mx-auto lg:mt-0">
             <h1 class="text-5xl mb-4">Welcome to Lara Quiz!</h1>  
          
           
