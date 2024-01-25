@@ -22,7 +22,7 @@ class WelcomeController extends Controller
         }           
          
         $availableCategories   =  config('custom.quiz.categories');   
-        $availableDifficulties =  config('custom.quiz.difficulties');   
+        $availableDifficulties =  config('custom.quiz.difficulties');  
       
         return view('welcome', [
             'params' => $quizParams,
@@ -33,9 +33,9 @@ class WelcomeController extends Controller
 
     public function changeCategory(Request $request) {
 
-        $newCategoryNo = $request['category-no'];
+        $newCategory = $request['category'];
 
-        $this->quizParamsService->storeSelectedCategory($newCategoryNo);
+        $this->quizParamsService->storeSelectedCategory($newCategory);
        
         return redirect()->route('welcome');
     }

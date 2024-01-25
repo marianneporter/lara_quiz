@@ -15,12 +15,13 @@
                 @csrf
                 <div class = " text-white w-full p-4 rounded-sm">
                     <div class="flex justify-center gap-2 flex-wrap">
-                        @foreach ( $availableCategories as $categoryNo => $categoryName)                            
-                            <button type="submit" name="category-no" 
+                        @foreach ( $availableCategories as $availableCategory => $availableCategoryName)   
+                                            
+                            <button type="submit" name="category" 
                                 class="rounded-sm  border-2 border-orange-700 px-2
-                                        {{ $params->categoryNo == $categoryNo ? 
+                                        {{ $params->category == $availableCategory ? 
                                              'bg-orange-700' : ' bg-transparent' }}"
-                                value="{{ $categoryNo  }}">{{ $categoryName }}                              
+                                value="{{ $availableCategory  }}">{{ $availableCategoryName }}                              
                             </button>                                  
                         @endforeach                       
                     </div>  
