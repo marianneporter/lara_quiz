@@ -8,5 +8,5 @@ The app uses Laravel, PHP and Tailwind.
 
 Unusually for me, it contains no JavaScript.  All of the processing is done server side.
 
-A working verson of the app can be found at https://lara-quiz-1a71244db678.herokuapp.com/quiz/results
+A working verson of the app can be found at https://lara-quiz-1a71244db678.herokuapp.com
 
