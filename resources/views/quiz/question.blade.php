@@ -6,8 +6,8 @@
     <div class="question-page min-w-full bg-blue-gradient text-white 
                 min-h-screen p-2
                 lg:flex lg:items-center lg:justify-center">
-        <main class="main flex flex-col items-center max-w-[30rem]
-                     mt-28 sm:mt-32 mx-auto lg:mt-0">
+        <main class="main flex flex-col items-center sm:justify-center
+                    full sm:w-[30rem] mt-28 sm:mt-32 mx-auto lg:mt-0">
            
             <h1 class="text-xl">Question {{$questionNo}} </h1>
           
