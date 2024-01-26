@@ -29,7 +29,7 @@ class QuizParamsService
       
         $quizParams = session('quizParams');
         $quizParams->category = $newCategory;
-        session(['quizParams' => $quizParams]);  
+        session(['quizParams' => $quizParams]);        
         return $quizParams;      
     }
 

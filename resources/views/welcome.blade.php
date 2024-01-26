@@ -15,8 +15,10 @@
                 @csrf
                 <div class = " text-white w-full p-4 rounded-sm">
                     <div class="flex justify-center gap-2 flex-wrap">
+                      
                         @foreach ( $availableCategories as $availableCategory => $availableCategoryName)   
-                                            
+                           
+                             
                             <button type="submit" name="category" 
                                 class="rounded-sm  border-2 border-orange-700 px-2
                                         {{ $params->category == $availableCategory ? 

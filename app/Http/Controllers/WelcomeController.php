@@ -13,14 +13,14 @@ class WelcomeController extends Controller
         $this->quizParamsService = $quizParamsService;       
     }
 
-    public function index() {  
-        
-        if ($this->quizParamsService->quizParamsSet()) {
+    public function index() {        
+     
+        if ($this->quizParamsService->quizParamsSet()) {          
             $quizParams = $this->quizParamsService->getQuizParams(); 
-        } else {
+        } else {         
             $quizParams = $this->quizParamsService->initialiseSessionParams(); 
-        }           
-         
+        }       
+       
         $availableCategories   =  config('custom.quiz.categories');   
         $availableDifficulties =  config('custom.quiz.difficulties');  
       
@@ -34,7 +34,7 @@ class WelcomeController extends Controller
     public function changeCategory(Request $request) {
 
         $newCategory = $request['category'];
-
+      
         $this->quizParamsService->storeSelectedCategory($newCategory);
        
         return redirect()->route('welcome');

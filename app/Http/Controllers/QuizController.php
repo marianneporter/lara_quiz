@@ -22,7 +22,7 @@ class QuizController extends Controller
 
         if ($this->quizService->fetchQuestions()) {
             // questions fetched successfully
-            return redirect()->route('quiz.question', ['question' => 1]);
+            return redirect()->route('quiz.show.question', ['question' => 1]);
         }    
         
         //error condition - api call unsuccessful
@@ -41,15 +41,14 @@ class QuizController extends Controller
     
     public function handleQuestionAnswer(Request $request, $questionNo) {
 
-        $userAnswer = $request->input('selected-answer');
-      
+        
+        $userAnswer = $request->input('selected-answer');      
+     
         if ($userAnswer) {
             $this->quizService->updateUserAnswer($questionNo, $userAnswer);
-        }   
-
-        $this->quizService->updateUserAnswer( $questionNo, $userAnswer);
-       
-        $action     = $request->input('action');
+        }  
+        
+        $action = $request->input('action');
 
         // go to finish after storing answer and finish button clicked
         if ($action == "finish") {
@@ -59,7 +58,7 @@ class QuizController extends Controller
         // go to next or previous question after storing current answer
         $questionNo = $action == 'next' ? $questionNo + 1 : $questionNo - 1;
                              
-        return redirect()->route('quiz.question', ['question' => $questionNo]);
+        return redirect()->route('quiz.show.question', ['question' => $questionNo]);
     }
 
     public function finish() {          

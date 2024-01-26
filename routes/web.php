@@ -20,8 +20,10 @@ Route::post('/category', [WelcomeController::class, 'changeCategory'])->name('we
 Route::post('/difficulty', [WelcomeController::class, 'changeDifficulty'])->name('welcome.difficulty');
 
 Route::get('/quiz/start', [QuizController::class, 'start'])->name('quiz.start');
-Route::get('/quiz/question/{question}', [QuizController::class, 'showQuestion'])->name('quiz.question');
-Route::post('/quiz/question/{question}', [QuizController::class, 'handleQuestionAnswer'])->name('quiz.question');
+Route::get('/quiz/question/{question}', 
+             [QuizController::class, 'showQuestion'])->name('quiz.show.question');
+Route::post('/quiz/question/{question}',
+             [QuizController::class, 'handleQuestionAnswer'])->name('quiz.handle.answer');
 Route::get('/quiz/finish', [QuizController::class, 'finish'])->name('quiz.finish');
 
 Route::get('/quiz/results', [QuizController::class, 'results'])->name('quiz.results');

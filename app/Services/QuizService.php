@@ -1,12 +1,13 @@
 <?php
 namespace App\Services;
 
+use Exception;
+use Illuminate\Support\Facades\Log;
 use App\AppState\Models\QuizSession;
 use Illuminate\Support\Facades\Http;
 use App\AppState\Models\QuestionData;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Http\Client\ConnectionException;
-use Illuminate\Support\Facades\Log;
 
 
 class QuizService
@@ -24,8 +25,8 @@ class QuizService
         $questionCount = $quizParams->noOfQuestions;
         $difficulty = strtolower($quizParams->difficulty);
 
-        $queryString = "limit=$questionCount&categories=$quizParams->category&difficulty=$difficulty";         
- 
+        $queryString = "limit=$questionCount&categories=$quizParams->category&difficulty=$difficulty&region=GB";
+
         $quizUrl = "https://the-trivia-api.com/v2/questions?{$queryString}";
 
         try {
@@ -73,6 +74,7 @@ class QuizService
     }
 
     public function updateUserAnswer($questionNo, $userAnswer) {
+      
         $quizSession = session('quiz', []);
         $quizSession->questions[$questionNo]->userAnswer = $userAnswer;
         session(['quiz' => $quizSession]);

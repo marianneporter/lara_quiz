@@ -17,7 +17,8 @@
 
             <h1 class="text-xl">Select Answer...</h1>
 
-            <form action="{{ route('quiz.question', $questionNo) }}" method="post" class="w-full">
+            <form action="{{ route('quiz.handle.answer', $questionNo) }}" method="post" 
+                  class="w-full">
                 @csrf
 
                 @foreach ($question->possibleAnswers as $key => $value)
