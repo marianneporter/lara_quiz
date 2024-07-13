@@ -19,7 +19,7 @@
 
             <h1 class="text-xl">Select Answer...</h1>
 
-            <form action="{{ route('quiz.handle.answer', $questionNo) }}" method="post" 
+            <form action="{{ route('quiz.handle.answer', ['quizId' => $quizId, 'question' => $questionNo]) }}" method="post" 
                   class="w-full">
                 @csrf
 
@@ -54,4 +54,5 @@
                 </div>
             </form>
         </main>
+    </div>
 @endsection

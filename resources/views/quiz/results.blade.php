@@ -27,7 +27,7 @@
         
             <div class="flex flex-col sm:flex-row justify-between items-center gap-2 mt-2 sm:mt-4">
                 <h2 class="text-2xl">Your Results</h2>                   
-                <form action="{{ route('quiz.results.filter') }}" method="post" >
+                <form action="{{ route('quiz.results.filter', ['quizId' => $quizId ]) }}" method="post" >
                     @csrf
                     <div class="flex gap-2">
                         <button type="submit" name="filter" 

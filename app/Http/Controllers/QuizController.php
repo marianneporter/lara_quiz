@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use session;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Services\QuizService;
 use App\Services\QuizParamsService;
+use Illuminate\Support\Facades\Log;
 
 class QuizController extends Controller
 {
@@ -17,12 +20,18 @@ class QuizController extends Controller
         $this->quizParamsService = $quizParamsService;    
     }
 
-    public function start() {         
+    public function start() {          
+        
         session()->forget('quiz');
+        
+        //set up unique quiz id
+        $quizId = Str::uuid()->toString();
+        session()->put('quiz_id', $quizId);
+        session()->put('quiz_status', 'inProgress');   
 
         if ($this->quizService->fetchQuestions()) {
             // questions fetched successfully
-            return redirect()->route('quiz.show.question', ['question' => 1]);
+            return redirect()->route('quiz.show.question', ['quizId' => $quizId, 'question' => 1]);
         }    
         
         //error condition - api call unsuccessful
@@ -30,17 +39,15 @@ class QuizController extends Controller
     }
 
 
-    public function showQuestion($questionNo) {  
-      
+    public function showQuestion($quizId, $questionNo) {          
         $question = $this->quizService->getQuestion($questionNo); 
         $params = $this->quizParamsService->getQuizParams();
         $questionCount = $params->noOfQuestions;    
         return view('quiz.question', 
-                     compact('question', 'questionNo', 'questionCount'));    
+                     compact('question', 'questionNo', 'questionCount', 'quizId'));    
     }
     
-    public function handleQuestionAnswer(Request $request, $questionNo) {
-
+    public function handleQuestionAnswer(Request $request, $quizId, $questionNo) {
         
         $userAnswer = $request->input('selected-answer');      
      
@@ -52,25 +59,30 @@ class QuizController extends Controller
 
         // go to finish after storing answer and finish button clicked
         if ($action == "finish") {
-            return redirect()->route('quiz.finish');
+            return redirect()->route('quiz.finish', ['quizId' => $quizId]);
         }
         
         // go to next or previous question after storing current answer
         $questionNo = $action == 'next' ? $questionNo + 1 : $questionNo - 1;
                              
-        return redirect()->route('quiz.show.question', ['question' => $questionNo]);
+        return redirect()->route('quiz.show.question', [ 'quizId' => $quizId,
+                                                         'question' => $questionNo]);
     }
 
-    public function finish() {          
-
+    public function finish($quizId) {            
+       
         $params = $this->quizParamsService->getQuizParams();
         $questionCount = $params->noOfQuestions; 
         $score = $this->quizService->calcScore();
+
+        session()->put('quiz_status', 'completed');
+     
         return view('quiz.finish', ['score' => $score,
-                                    'questionCount' => $questionCount]);   
+                                    'questionCount' => $questionCount,
+                                    'quizId' => $quizId ]);   
     }
 
-    public function results() {
+    public function results($quizId) {
         $quizSession = $this->quizService->getQuizSession();
         $quizParams =$this->quizParamsService->getQuizParams();
         $filter = $quizParams->filterResults;
@@ -89,21 +101,20 @@ class QuizController extends Controller
             });
         }
 
-
-
         return view('quiz.results', ['score'  => $quizSession->score,
                                      'questions'   => $questionsToReturn,
                                      'filter' => $quizParams->filterResults,
-                                     'questionCount' => $questionCount]);   
+                                     'questionCount' => $questionCount,
+                                     'quizId' => $quizId]);   
     }
 
-    public function filterResults(Request $request) {
+    public function filterResults(Request $request, $quizId) {
      
         $filter = $request['filter'];       
 
         $this->quizParamsService->storeSelectedFilter($filter);
 
-        return redirect()->route('quiz.results');
+        return redirect()->route('quiz.results', $quizId);
        
     }
 

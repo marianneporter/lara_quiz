@@ -20,13 +20,20 @@ Route::post('/category', [WelcomeController::class, 'changeCategory'])->name('we
 Route::post('/difficulty', [WelcomeController::class, 'changeDifficulty'])->name('welcome.difficulty');
 
 Route::get('/quiz/start', [QuizController::class, 'start'])->name('quiz.start');
-Route::get('/quiz/question/{question}', 
-             [QuizController::class, 'showQuestion'])->name('quiz.show.question');
-Route::post('/quiz/question/{question}',
+Route::get('/quiz/question/{quizId}/{question}', 
+             [QuizController::class, 'showQuestion'])
+             ->middleware('check.quiz.integrity')
+             ->name('quiz.show.question');                                                    
+Route::post('/quiz/question/{quizId}/{question}',
              [QuizController::class, 'handleQuestionAnswer'])->name('quiz.handle.answer');
-Route::get('/quiz/finish', [QuizController::class, 'finish'])->name('quiz.finish');
 
-Route::get('/quiz/results', [QuizController::class, 'results'])->name('quiz.results');
-Route::post('/quiz/results/filter', [QuizController::class, 'filterResults'])->name('quiz.results.filter');
+Route::get('/quiz/finish/{quizId}', [QuizController::class, 'finish'])
+            ->middleware('check.quiz.integrity')
+            ->name('quiz.finish');
+
+Route::get('/quiz/results/{quizId}', [QuizController::class, 'results'])
+            ->middleware('check.quiz.integrity')
+            ->name('quiz.results');
+Route::post('/quiz/results/filter/{quizId}', [QuizController::class, 'filterResults'])->name('quiz.results.filter');
 
 Route::get('/error', [QuizController::class, 'error'])->name('error');
